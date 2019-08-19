@@ -1,9 +1,9 @@
 import React ,{ Component} from 'react' ;
-import { StyleSheet, Text, ScrollView,TouchableOpacity ,Image,View,ActivityIndicator } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity ,TextInput ,Image,View,ActivityIndicator } from 'react-native';
 import * as Font from 'expo-font';
 import firebase from 'firebase' ;
 import { Entypo} from '@expo/vector-icons' ;
-import { Button } from 'react-native-elements' ;
+import { Button, Input  } from 'react-native-elements' ;
 import * as Facebook from 'expo-facebook';
 
 import expo from 'expo';
@@ -18,7 +18,8 @@ super()
 
 this.state={
 
-    fontLoaded : false 
+    fontLoaded : false ,
+     text: 'Useless Placeholder' 
 }
 
 }
@@ -95,17 +96,12 @@ icon={
  
 }
 color="#3b5998"
-title=" Login to facebook"  
+title="  Login to facebook  "  
 fontSize="30"
 
 
 
-
-
 />
-
-
-
    
 
    
@@ -176,8 +172,40 @@ source ={ require('../assets/1.png' )}
 {this.button} 
 
 
+<Text style={{ color : "#FFFFFF"}}> ____________ OR ____________
+
+
+</Text>
+<TextInput
+ style={styles.input}
+  placeholder='    Mobile Number or Email    '
+  shake={true}
+/>
+
+<TextInput
+ style={styles.input}
+  placeholder='    Full Name                              '
+  shake={true}
+/>
+
+<TextInput
+ style={styles.input}
+  placeholder='    User Name                             '
+  shake={true}
+/>
+<TextInput
+ style={styles.input}
+  placeholder='    Password                               '
+  shake={true}
+/>
 </View>
 
+<Button 
+large
+color="#3b5998"
+title="Next"  
+fontSize="30"
+/>
 
 </View>
     
@@ -196,7 +224,19 @@ const styles= StyleSheet.create({
       //   flex: 1,
     //alignItems: 'stretch',
     //justifyContent: 'cover',
+    padding:20 ,
    backgroundColor : '#FED45E' 
-    }
+    } ,
+   
+    input :{
+   marginBottom :20,
+    height :40 ,
+    backgroundColor : "#FFFFFF" ,     
+    borderRadius: 10,
+    top :10 ,
+    } 
+
+
+
 
 })
