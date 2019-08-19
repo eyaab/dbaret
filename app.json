@@ -4,6 +4,7 @@
     "slug": "dbaret",
     "privacy": "public",
     "sdkVersion": "33.0.0",
+    "facebookScheme" :"fb1132417743608607"   ,
     "platforms": [
       "ios",
       "android",

@@ -2,10 +2,12 @@ import React ,{ Component} from 'react' ;
 import { StyleSheet, Text, ScrollView,TouchableOpacity ,Image,View,ActivityIndicator } from 'react-native';
 import * as Font from 'expo-font';
 import firebase from 'firebase' ;
-import { Entypo,AntDesign} from '@expo/vector-icons' ;
+import { Entypo} from '@expo/vector-icons' ;
+import { Button } from 'react-native-elements' ;
+import * as Facebook from 'expo-facebook';
 
 import expo from 'expo';
-
+const fb_app_id ="fb1132417743608607" ;
 const id ="1132417743608607";
 
 export default class Login extends Component {
@@ -22,7 +24,7 @@ this.state={
 }
 
 
-login =async()=>{
+/*login =async()=>{
 
 const {type,token } = await expo.Facebook.logInWithReadPermissionsAsync(id, {permissions : [ 'public_profile,email,user_friends'] })
 
@@ -43,33 +45,80 @@ if (type===success)
   }
  else {alert(type);}
 
+}*/
+
+
+  logIn=async() => {
+  try {
+    const {
+      type,
+      token,
+      expires,
+      permissions,
+      declinedPermissions,
+    } = await Facebook.logInWithReadPermissionsAsync(id, {
+      permissions: ['public_profile'],
+    });
+    if (type === 'success') {
+      // Get the user's name using Facebook's Graph API
+      const response = await fetch(`https://graph.facebook.com/me?access_token=${token}`);
+      Alert.alert('Logged in!', `Hi ${(await response.json()).name}!`);
+    } else {
+      // type === 'cancel'
+    }
+  } catch ({ message }) {
+    alert(`Facebook Login Error: ${message}`);
+  }
 }
+
 
 get button ()
 {
   return (
-    <TouchableOpacity onPress={()=>this.login}>
-    <View style={{  width: 180, 
-    height: 40 , borderRadius:5,padding:20,backgroundColor:'#FFFFFF' }}>
-    
-    <Text style={{ color : '#3b5998'}}>
-    <Entypo name='facebook' color="#3b5998" size={20} 
-    />    Login to facebook  
-    </Text>
+   
+   
+   
+<Button
+large 
   
+//  type="Solid"
+
+  large 
+onPress={this.logIn.bind(this)} 
+icon={
+  <Entypo
+    name="facebook"
+    size={15}
+    color="#FFFFFF"
+    
+  />
+ 
+}
+color="#3b5998"
+title=" Login to facebook"  
+fontSize="30"
+
+
+
+
+
+/>
+
+
+
+   
+
    
     
-    </View>
-
-    </TouchableOpacity>
- 
- 
- 
   )
 }
+//<TouchableOpacity onPress={()=>this.login}>
+//<View style={{  width: 180, height: 40 , borderRadius:5,padding:20, }}>   </View>
+  
+//</TouchableOpacity>
+//<Text style={{ color : '#3b5998'}}><Entypo name='facebook' color="#3b5998" size={20} /> Login to facebook    </Text>
 
-
-
+// buttonStyle: color="#3b5998"
 
 
 
