@@ -1,9 +1,10 @@
 import React ,{ Component} from 'react' ;
 import { StyleSheet, Text, TouchableOpacity ,TextInput ,Image,View,ActivityIndicator } from 'react-native';
 import * as Font from 'expo-font';
-import firebase from 'firebase' ;
+import firebase from 'firebase' ; 
 import { Entypo} from '@expo/vector-icons' ;
 import { Button, Input  } from 'react-native-elements' ;
+import {f,auth,database} from '../config/config.js'
 import * as Facebook from 'expo-facebook';
 
 import expo from 'expo';
@@ -12,44 +13,47 @@ const id ="1132417743608607";
 
 export default class Login extends Component {
 
-constructor()
+constructor(props)
 {
-super() 
+super(props) 
+
+//this.RegisterUser('abdelmoulaeya@yahoo.fr' ,'hellowww') ;
+
+f.auth().onAuthStateChanged(function(user){
+
+if (user){
+console.log('Logged in',user) ;
+} 
+else {
+
+  console.log ('Logged out',user) ;
+}
+
+
+
+});
+
+
 
 this.state={
 
     fontLoaded : false ,
-     text: 'Useless Placeholder' 
+     text: '', 
+     text1:'',
+     text2 :'',
+     text3 :''
+}
 }
 
-}
 
-
-/*login =async()=>{
-
-const {type,token } = await expo.Facebook.logInWithReadPermissionsAsync(id, {permissions : [ 'public_profile,email,user_friends'] })
-
-if (type===success)
-{
-  const response=fetch(
-    `https://graph.facebook.com/me?access_token=${token}&fields=id,name,email,about,picture`
-    );
-    console.log('response',response);
-    const responseJSON = JSON.stringify(await response.json());
-    console.log('USER INFO',json);
-
-  try {
-    await firebase.auth().signInWithCredential(token) ; } catch({error})  {
-         // Handle Errors here.
-    alert(`Facebook Login Error: ${error}`);
-       };
+RegisterUser=(email,password)=>{
+  console.log(email,password) ;
+  auth.createUserWithEmailAndPassword(email,password)
+  .then((userObj)=> console.log(email,password,userObj))
+  .catch((error)=>console.log('error logging in',error)) ;
   }
- else {alert(type);}
-
-}*/
-
-
-  logIn=async() => {
+ 
+logIn=async() => {
   try {
     const {
       type,
@@ -180,23 +184,32 @@ source ={ require('../assets/1.png' )}
  style={styles.input}
   placeholder='    Mobile Number or Email    '
   shake={true}
+  onChangeText={(text) => this.setState({text})}
+          value={this.state.text}
 />
 
 <TextInput
  style={styles.input}
   placeholder='    Full Name                              '
   shake={true}
+  onChangeText={(text1) => this.setState({text1})}
+          value={this.state.text1}
 />
 
 <TextInput
  style={styles.input}
   placeholder='    User Name                             '
   shake={true}
+  onChangeText={(text2) => this.setState({text2})}
+  value={this.state.text2}
+
 />
 <TextInput
  style={styles.input}
   placeholder='    Password                               '
   shake={true}
+  onChangeText={(text3) => this.setState({text3})}
+          value={this.state.text3}
 />
 </View>
 
@@ -224,8 +237,8 @@ const styles= StyleSheet.create({
       //   flex: 1,
     //alignItems: 'stretch',
     //justifyContent: 'cover',
-    padding:20 ,
-   backgroundColor : '#FED45E' 
+   padding:20 ,
+ backgroundColor : '#FED45E' 
     } ,
    
     input :{
