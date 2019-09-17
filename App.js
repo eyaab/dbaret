@@ -27,10 +27,10 @@ export default class App extends Component {
 
 
 const RecettesTabNavigator=createBottomTabNavigator({
-    الصفحات ,
-    الوصفات ,
-    الاعدادات 
-
+  //  الصفحات ,
+   // الوصفات ,
+  //  الاعدادات 
+  الوصفات
 })
 
 const RecettesStackNavigator = createStackNavigator({

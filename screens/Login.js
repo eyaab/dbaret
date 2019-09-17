@@ -1,15 +1,27 @@
 import React ,{ Component} from 'react' ;
 import { StyleSheet, Text, TouchableOpacity ,TextInput ,Image,View,ActivityIndicator } from 'react-native';
 import * as Font from 'expo-font';
-import firebase from 'firebase' ; 
+
+
 import { Entypo} from '@expo/vector-icons' ;
 import { Button, Input  } from 'react-native-elements' ;
 import {f,auth,database} from '../config/config.js'
-import * as Facebook from 'expo-facebook';
+import * as Expo from 'expo';
+import { YellowBox } from 'react-native';
+import _ from 'lodash';
 
-import expo from 'expo';
+
+
 const fb_app_id ="fb1132417743608607" ;
 const id ="1132417743608607";
+
+YellowBox.ignoreWarnings(['Setting a timer']);
+const _console = _.clone(console);
+console.warn = message => {
+  if (message.indexOf('Setting a timer') <= -1) {
+    _console.warn(message);
+  }
+};
 
 export default class Login extends Component {
 
@@ -29,11 +41,7 @@ else {
   console.log ('Logged out',user) ;
 }
 
-
-
 });
-
-
 
 this.state={
 
@@ -46,49 +54,61 @@ this.state={
 }
 
 
-RegisterUser=(email,password)=>{
-  console.log(email,password) ;
-  auth.createUserWithEmailAndPassword(email,password)
-  .then((userObj)=> console.log(email,password,userObj))
-  .catch((error)=>console.log('error logging in',error)) ;
-  }
+ logIn=async() => {
  
-logIn=async() => {
-  try {
+  
     const {
       type,
       token,
-      expires,
-      permissions,
-      declinedPermissions,
-    } = await Facebook.logInWithReadPermissionsAsync(id, {
+
+    } = await Expo.Facebook.logInWithReadPermissionsAsync(id, {
       permissions: ['public_profile'],
     });
     if (type === 'success') {
+
+      
+        // Get the user's name using Facebook's Graph API
+    
+
+
       // Get the user's name using Facebook's Graph API
-      const response = await fetch(`https://graph.facebook.com/me?access_token=${token}`);
-      Alert.alert('Logged in!', `Hi ${(await response.json()).name}!`);
+      //const response = await fetch(`https://graph.facebook.com/me?access_token=${token}`);
+      const credentials = f.auth.FacebookAuthProvider.credential(token) ;
+    
+       f.auth().signInWithCredential(credentials).catch((error) =>{ 
+        console.log('error...',error);
+       } )
+      
+      }}  
+     /* Alert.alert('Logged in!', `Hi ${(await response.json()).name}!`);
     } else {
       // type === 'cancel'
     }
   } catch ({ message }) {
     alert(`Facebook Login Error: ${message}`);
-  }
-}
+  }*/
+
+
+  RegisterUser=(email,password)=>{
+    console.log(email,password) ;
+    auth.createUserWithEmailAndPassword(email,password)
+    .then((userObj)=> console.log(email,password,userObj))
+    .catch((error)=>console.log('error logging in',error)) ;
+    }
+
 
 
 get button ()
 {
   return (
-   
-   
-   
+
+
+
 <Button
 large 
   
 //  type="Solid"
-
-  large 
+ 
 onPress={this.logIn.bind(this)} 
 icon={
   <Entypo
@@ -106,20 +126,8 @@ fontSize="30"
 
 
 />
-   
 
-   
-    
-  )
-}
-//<TouchableOpacity onPress={()=>this.login}>
-//<View style={{  width: 180, height: 40 , borderRadius:5,padding:20, }}>   </View>
-  
-//</TouchableOpacity>
-//<Text style={{ color : '#3b5998'}}><Entypo name='facebook' color="#3b5998" size={20} /> Login to facebook    </Text>
-
-// buttonStyle: color="#3b5998"
-
+)}
 
 
 async componentDidMount(){
@@ -234,9 +242,6 @@ fontSize="30"
 const styles= StyleSheet.create({
 
     container:{
-      //   flex: 1,
-    //alignItems: 'stretch',
-    //justifyContent: 'cover',
    padding:20 ,
  backgroundColor : '#FED45E' 
     } ,
